@@ -1,6 +1,7 @@
 package com.company;
 
 import java.util.Comparator;
+import java.util.LinkedList;
 
 public class QuickSort {
     // quicksort – pivot er siste element. Sorter intervallet fom start, tmim end
@@ -20,6 +21,22 @@ public class QuickSort {
         // Ferdig med splitt, utfør rekursive kall
         quickSort(array, start, i, comp); // Sorter dei «små»
         quickSort(array, i+1, end, comp); // Sorter dei «store»
+    }
+
+    //Quicksort stakk
+    public static <AnyType extends Comparable<? super AnyType>>
+    void quickSortStakk(AnyType[] a, int low, int high){
+        LinkedList<QSIntervall> qsStakk = new LinkedList<>();
+        qsStakk.push(new QSIntervall(low, high));
+        while (! qsStakk.isEmpty()) {
+            QSIntervall qsi = qsStakk.pop();
+            if (qsi.size() < CUTOFF) insertionSort(a, qsi.low, qsi.high);
+            else {
+                int pivotPosisjon = splitt(a, qsi.low, qsi.high);
+                qsStakk.push(new QSIntervall(qsi.low, pivotPosisjon-1));
+                qsStakk.push(new QSIntervall(pivotPosisjon+1, qsi.high));
+            }
+        }
     }
 
     //Drivarrutine
